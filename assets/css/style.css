@@ -1460,3 +1460,28 @@ footer .credits {
 footer .credits a {
   color: #fff;
 }
+
+/*----------------------------------------------------------------
+#Scrollbar
+-----------------------------------------------------------------*/
+/* Overall scrollbar container */
+::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+  height: 5px; /* Height of the horizontal scrollbar */
+}
+
+/* The draggable part of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #000; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Roundness of the scrollbar thumb */
+}
+
+/* The track (part of the scrollbar not covered by the thumb) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the scrollbar track */
+}
+
+/* The corner (bottom-right corner of the scrollbar, where the horizontal and vertical scrollbars meet) */
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
