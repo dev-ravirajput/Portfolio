@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Ravi | Full-Stack Laravel & Vue.js Developer</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya&family=Big+Shoulders+Inline+Text:wght@500&family=Black+Ops+One&family=Bungee+Spice&family=Croissant+One&family=Dancing+Script&family=Lobster&family=PT+Serif&family=Satisfy&family=Sedan+SC&family=Skranji&display=swap" rel="stylesheet">  <!-- Favicons -->
+  <link href="https://www.pngall.com/wp-content/uploads/2/R-Letter-PNG-Pic.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+  /* Footer Styles */
+  .footer {
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 30px 0;
+    text-align: center;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .social-links {
+    margin-bottom: 20px;
+  }
+  
+  .social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 8px;
+    color: #fff;
+    font-size: 18px;
+    transition: all 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    background: #0078ff;
+    transform: translateY(-3px);
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .copyright-box {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+    width: 100%;
+  }
+  
+  .copyright {
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  .credits {
+    font-size: 13px;
+    color: #ccc;
+  }
+  
+  .credits a {
+    color: #0078ff;
+    text-decoration: none;
+  }
+  
+  .credits a:hover {
+    text-decoration: underline;
+  }
+    .white-text-with-blue-shadow {
+            text-shadow:
+                1px 1px 2px black,
+                0 0 1em rgb(77, 77, 237),
+                0 0 0.2em rgb(77, 77, 237);
+            color: white; /* Assuming you want the text to be white */
+        }
+
+        .satisfy-regular {
+            font-family: "Satisfy", cursive;
+            font-weight: 400;
+            font-style: normal;
+        }
+    /* FOr What's app Button */
+    .float{
+	position:fixed;
+	width:55px;
+	height:55px;
+	bottom:70px;
+	right:5px;
+	background-color:#25d366;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+        font-size:30px;
+	box-shadow: 0px 0px 30px #25d366;
+  z-index:100;
+}
+
+.my-float{
+	margin-top:12px;
+}
+
+ /* Custom Cursor */
+	  .cursor {
+    width: 20px;
+    height: 20px;
+    border: 1px solid white;
+    border-radius: 50%;
+    position: absolute;
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+    animation: cursorAnim .5s infinite alternate;
+    pointer-events: none;
+}
+
+.cursor::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    border: 8px solid gray;
+    border-radius: 50%;
+    opacity: .5;
+    top: -8px;
+    left: -8px;
+    animation: cursorAnim2 .5s infinite alternate;
+}
+
+@keyframes cursorAnim {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.7);
+    }
+}
+
+@keyframes cursorAnim2 {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.4);
+    }
+}
+
+@keyframes cursorAnim3 {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(3);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.expand {
+    animation: cursorAnim3 .5s forwards;
+    border: 1px solid red;
+}
+
+  .w-like a {
+    color: inherit; /* or specify your default color */
+    transition: color 0.3s ease;
+  }
+  
+  .w-like a:hover {
+    color: #000; /* Black on hover */
+    text-decoration: none; /* Remove underline if needed */
+  }
+  
+  /* If you want to add background color change on hover as well */
+  .w-like {
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  
+  .w-like:hover {
+    /* Optional: Add background color change */
+    /* background: #f0f0f0; */
+  }
+</style>
+
+</head>
+
+<body>
+<div class="cursor"></div>
+<a href="https://api.whatsapp.com/send?phone=9026494238&text=Hi Ravi!" class="float" target="_blank">
+<i class="fa-brands fa-whatsapp my-float"></i>
+</a>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="index.html">Ravi Rajpoot</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <li><a class="nav-link scrollto" href="#services">Services</a></li>
+          <li><a class="nav-link scrollto " href="#experience">Experience</a></li>
+          <li><a class="nav-link scrollto " href="#work">Projects</a></li>
+          <li><a class="btn btn-primary p-2" href="2025 Ravi Rajpoot CV.pdf">Download CV</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <div id="hero" class="hero route bg-image" style="background-image: url(https://wallpapercave.com/wp/wp5516588.jpg)">
+    <div class="overlay-itro"></div>
+    <div class="hero-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          <!--<p class="display-6 color-d">Hello, world!</p>-->
+          <h1 class="hero-title mb-4 white-text-with-blue-shadow">I am Ravi Rajpoot</h1>
+          <p class="hero-subtitle"><span class="typed" data-typed-items="Php, Laravel, CodeIgniter, JavaScript, JQuery"></span></p>
+          <!-- <p class="pt-3"><a class="btn btn-primary btn js-scroll px-4" href="#about" role="button">Learn More</a></p> -->
+        </div>
+      </div>
+    </div>
+  </div><!-- End Hero Section -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about-mf sect-pt4 route">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="box-shadow-full">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-sm-6 col-md-5">
+                      <div class="about-img">
+                        <img src="assets/img/ravi_img.jpg" class="img-fluid rounded b-shadow-a" alt="">
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-7">
+                      <div class="about-info">
+                        <p><span class="title-s">Name: </span> <span>Ravi Rajpoot</span></p>
+                        <p><span class="title-s">Profile: </span> <span>Full Stack Developer</span></p>
+                        <p><span class="title-s">Email: </span> <a href="mailto:dev.ravirajput@gmail.com">dev.ravirajput@gmail.com</a></p>
+                        <p><span class="title-s">Phone: </span> <a href="tel:+919026494238">+91 9026494238</a></p>
+                        <p><span class="title-s">Address: </span> <span>Adil Nagar, Lucknow</span></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="skill-mf">
+                    <p class="title-s">Skill</p>
+                    <span>HTML</span> <span class="pull-right">85%</span>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span>CSS</span> <span class="pull-right">75%</span>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span>PHP</span> <span class="pull-right">80%</span>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span>JAVASCRIPT</span> <span class="pull-right">70%</span>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                     <span>Laravel</span> <span class="pull-right">85%</span>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+		      <span>CodeIgniter</span> <span class="pull-right">70%</span>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="about-me pt-4 pt-md-0">
+                    <div class="title-box-2">
+                      <h5 class="title-left">
+                        About me
+                      </h5>
+                    </div>
+                    <p class="lead">
+                     I am a highly competent IT professional with a proven track record in designing websites, networking, and managing databases. I have strong technical skills as well as excellent interpersonal skills, enabling me to interact with a wide range of clients. I am eager to be challenged in order to grow and further improve my IT skills. My greatest passion in life is using my technical know-how to benefit other people and organizations.
+                    </p>
+                    <p class="lead">
+                     Seeking a challenging career in an organization where I can enhance my skills, reach the zenith of excellence, and contribute maximally to achieving the long-term goals of the organization.
+
+Skilled in <b>PHP</b>, <b>Laravel</b>, <b>CodeIgniter</b>, <b>JavaScript</b>, <b>jQuery</b>, <b>HTML</b>, <b>CSS</b>, <b>Bootstrap</b>, and <b>MySQL</b>. I completed a live project named <b>"<a href="https://sub800.com" style="text-decoration: none">Sub800</a>"</b>, which is about property dealing and is live now.
+
+I am proficient in maintaining existing programs with the implementation of new techniques.
+                    </p>
+                    <p class="lead">
+                     
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services-mf pt-5 route">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Technologies
+              </h3>
+              <p class="subtitle-a">
+                 Technologies I have worked with
+              </p>
+              <div class="line-mf"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa-brands fa-php"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">PHP</h2>
+                <p class="s-description text-center">
+                  <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa-brands fa-laravel"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">Laravel</h2>
+                <p class="s-description text-center">
+                   <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa-brands fa-free-code-camp"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">CodIgniter</h2>
+                <p class="s-description text-center">
+               <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+           <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa fa-code" aria-hidden="true"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">J Query</h2>
+                <p class="s-description text-center">
+               <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+            <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa-brands fa-js"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">JAVASCRIPT</h2>
+                <p class="s-description text-center">
+               <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+            <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa-solid fa-database"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">MY SQL</h2>
+                <p class="s-description text-center">
+               <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Experience Section ======= -->
+    <section id="experience" class="experience-mf pt-5 route">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Experience
+              </h3>
+              <p class="subtitle-a">
+                 Company I have worked with
+              </p>
+              <div class="line-mf"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+           <div class="col-md-4">
+            <div class="service-box">
+              <div class="service-ico">
+                <span class="ico-circle"><i class="fa-brands fa-weebly"></i></span>
+              </div>
+              <div class="service-content">
+                <h2 class="s-title">Webvire Software Solutions</h2>
+                <p class="s-description text-center">
+               <!-- Write here -->
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Experience Section -->
+
+
+    <!-- ======= Counter Section ======= -->
+     <div class="title-box text-center">
+              <h3 class="title-a">
+                Education
+              </h3>
+              <p class="subtitle-a">
+                All the education I have done
+              </p>
+              <div class="line-mf"></div>
+            </div>
+    <div class="section-counter paralax-mf bg-image" style="background-image: url(assets/img/counters-bg.jpg)">
+      <div class="overlay-mf"></div>
+      <div class="container position-relative">
+        <div class="row">
+          <div class="col-sm-3 col-lg-3">
+            <div class="counter-box counter-box pt-4 pt-md-0">
+              <div class="counter-ico">
+                <span class="ico-circle"><i class="fa fa-book" aria-hidden="true"></i></span>
+              </div>
+              <div class="counter-num">
+                <sapn data-purecounter-start="0" data-purecounter-end="74" data-purecounter-duration="1" class="counter purecounter"></sapn>
+                <sapn>%</sapn>
+                <p class="counter-text">High School</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 col-lg-3">
+            <div class="counter-box pt-4 pt-md-0">
+              <div class="counter-ico">
+                <span class="ico-circle"><i class="fa-solid fa-school"></i></span>
+              </div>
+              <div class="counter-num">
+                <sapn data-purecounter-start="0" data-purecounter-end="67" data-purecounter-duration="1" class="counter purecounter"></sapn>
+                <sapn>%</sapn>
+                <p class="counter-text">Intermediate</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 col-lg-3">
+            <div class="counter-box pt-4 pt-md-0">
+              <div class="counter-ico">
+                <span class="ico-circle"><i class="fa-solid fa-graduation-cap"></i></span>
+              </div>
+              <div class="counter-num">
+                <sapn data-purecounter-start="0" data-purecounter-end="66" data-purecounter-duration="1" class="counter purecounter"></sapn>
+                <sapn>%</sapn>
+                <p class="counter-text">Graduation (BCA)</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 col-lg-3">
+            <div class="counter-box pt-4 pt-md-0">
+              <div class="counter-ico">
+                <span class="ico-circle"><i class="fa-solid fa-user-graduate"></i></span>
+              </div>
+              <div class="counter-num">
+                <!-- <p data-purecounter-start="0" data-purecounter-end="1" data-purecounter-duration="1" class="counter purecounter"></p> -->
+                <p class="counter-text">Ongoing...</p>
+                <p></p>
+                <span class="counter-text">Post Graduation (MCA)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- End Counter Section -->
+
+    <!-- ======= Portfolio Section ======= -->
+    <section id="work" class="portfolio-mf sect-pt4 route">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Projects
+              </h3>
+              <p class="subtitle-a">
+                Projects done by me
+              </p>
+              <div class="line-mf"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="work-box">
+              <a href="portfolio-details.html" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                <div class="work-img">
+                  <img style="height: 200px" src="assets/img/Home-Page.jpg">
+                </div>
+              </a>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">sub800</h2>
+                    <i>Find your worspace</i>
+                    <div class="w-more">
+                      <span class="w-ctegory"><a href="https://laravel.com/">Laravel</a></span> / <span class="w-date">5 March 2024</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      <a href="sub800.html"> <span class="bi bi-plus-circle"></span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="work-box">
+              <a href="portfolio-details.html" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                <div class="work-img">
+                  <img style="height: 218px" src="https://www.jaypeehotels.com/blog/wp-content/uploads/2021/06/Online-Food-Delivery-1.jpg" alt="" class="img-fluid">
+                </div>
+              </a>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">Online Food Delevery</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Web Design</span> / <span class="w-date">1 Oct. 2023</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      <a href="portfolio-details1.html"> <span class="bi bi-plus-circle"></span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="work-box">
+              <a href="portfolio-details1.html" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                <div class="work-img">
+                  <img style="height: 220px" src="https://img.mlo-online.com/files/base/ebm/mlo/image/2015/10/MLO_Generic_LabManagement.png?auto=format&dpr=2&w=720" alt="" class="img-fluid">
+                </div>
+              </a>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">Lab Management</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Java</span> / <span class="w-date">21 july. 2023</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      <a href="portfolio-details2.html"> <span class="bi bi-plus-circle"></span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="work-box">
+              <a href="portfolio-details2.html" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                <div class="work-img">
+                  <img style="height: 218px" src="https://th.bing.com/th/id/OIP.Fq8s2VRG1cQ3fQbKAaJ_IgHaEK?rs=1&pid=ImgDetMain" alt="" class="img-fluid">
+                </div>
+              </a>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">Health Care</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Web Design</span> / <span class="w-date">5 jan. 2024</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      <a href="portfolio-details3.html"> <span class="bi bi-plus-circle"></span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+       <!--   <div class="col-md-4">
+            <div class="work-box">
+              <a href="index.html" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                <div class="work-img">
+                  <img style="height: 218px" src="https://wallpaperaccess.com/full/5652018.jpg" alt="" class="img-fluid">
+                </div>
+              </a>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">Portfolio</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Web Design</span> / <span class="w-date">11 feb. 2024</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      <a href="index.html"> <span class="bi bi-plus-circle"></span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+    
+
+        </div>
+      </div>
+    </section><!-- End Portfolio Section -->
+
+   
+  </main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="footer-content">
+          <!-- Social Media Icons -->
+          <div class="social-links">
+            <a href="https://www.instagram.com/the.ravi.rajput" target="_blank" class="social-icon">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dev-ravirajput" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100026887834468" target="_blank" class="social-icon">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://github.com/dev-ravirajput" target="_blank" class="social-icon">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:dev-ravirajput@gmail.com" class="social-icon">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+          
+          <!-- Copyright -->
+          <div class="copyright-box">
+            <p class="copyright">&copy; Copyright <strong>Ravi Rajpoot</strong>. All Rights Reserved</p>
+            <div class="credits">
+              Designed by <a href="https://github.com/vishu0009">Ravi Rajpoot</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+<script>
+	        const cursor = document.querySelector('.cursor');
+
+        document.addEventListener('mousemove', e => {
+            cursor.setAttribute("style", "top: "+(e.pageY - 10)+"px; left: "+(e.pageX - 10)+"px;")
+        })
+
+        document.addEventListener('click', () => {
+            cursor.classList.add("expand");
+
+            setTimeout(() => {
+                cursor.classList.remove("expand");
+            }, 500)
+        })
+</script>
+</html>
