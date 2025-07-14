@@ -61,6 +61,7 @@ a:hover {
 .card-blog,
 .work-box,
 .service-box,
+.service-box-experience,
 .paralax-mf {
   box-shadow: 0 13px 8px -10px rgba(0, 0, 0, 0.1);
 }
@@ -873,6 +874,8 @@ a:hover {
   border-radius: 1rem;
   margin-bottom: 3rem;
   text-align: center;
+  transition: all 500ms ease;
+  height: 335px;
 }
 
 .service-box:hover .ico-circle {
@@ -907,6 +910,54 @@ a:hover {
 }
 
 .service-box .s-description {
+  color: #4e4e4e;
+}
+
+/*--------------------------------------------------------------
+# service-box-experience
+--------------------------------------------------------------*/
+.service-box-experience {
+  background-color: #fff;
+  padding: 2.5rem 1.3rem;
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  transition: all 500ms ease;
+  height: 395px;
+}
+
+.service-box-experience:hover .ico-circle {
+  transition: all 500ms ease;
+  color: #fff;
+  background-color: #0078ff;
+  box-shadow: 0 0 0 10px #cde1f8;
+}
+
+.service-box-experience .service-ico {
+  margin-bottom: 1rem;
+  color: #1e1e1e;
+}
+
+.service-box-experience .ico-circle {
+  transition: all 500ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-box-experience .ico-circle i {
+  line-height: 0;
+  font-size: 40px;
+}
+
+.service-box-experience .s-title {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.4rem 0;
+}
+
+.service-box-experience .s-description {
   color: #4e4e4e;
 }
 
