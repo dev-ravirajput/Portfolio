@@ -1672,7 +1672,7 @@ footer .credits a {
     transition: all 0.3s ease;
   }
   
-  .w-like:hover {
-    /* Optional: Add background color change */
-    /* background: #f0f0f0; */
-  }
+
+    .play-btn{
+      color: #fff !important;
+    }

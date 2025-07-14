@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake vs Mouse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #111;
+      font-family: 'Arial', sans-serif;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    #gameCanvas {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+    
+    #scoreDisplay {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 24px;
+      text-shadow: 0 0 5px #0ff;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: 1px solid #0ff;
+      transition: all 0.3s ease;
+    }
+    
+    .control-btn {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+      transition: all 0.2s;
+      user-select: none;
+    }
+    
+    .control-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+    
+    #startBtn {
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    #exitBtn {
+      bottom: 20px;
+      right: 100px;
+    }
+    
+    #fullscreenBtn {
+      bottom: 20px;
+      left: 20px;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    .intro-title {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 48px;
+      text-align: center;
+      text-shadow: 0 0 10px #0ff;
+      z-index: 20;
+      opacity: 0;
+      animation: floatIn 2s forwards;
+    }
+    
+    @keyframes floatIn {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+    }
+    
+    .instructions {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+      text-align: center;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      max-width: 80%;
+      animation: fadeInOut 5s infinite;
+    }
+    
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    .swal2-popup {
+      background: #111 !important;
+      color: white !important;
+      border: 1px solid #0ff !important;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div id="scoreDisplay">Score: 0</div>
+  
+  <div class="intro-title" id="gameTitle">Snake vs Mouse</div>
+  <div class="instructions hidden" id="mobileInstructions">Swipe to guide the snake</div>
+  <div class="instructions hidden" id="desktopInstructions">Use arrow keys or WASD to control the snake</div>
+  
+  <div class="control-btn" id="startBtn" title="Play">▶</div>
+  <div class="control-btn" id="exitBtn" title="Exit Game">✖</div>
+  <div class="control-btn" id="fullscreenBtn" title="Full Screen 😇">⛶</div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const startBtn = document.getElementById('startBtn');
+    const exitBtn = document.getElementById('exitBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const gameTitle = document.getElementById('gameTitle');
+    const mobileInstructions = document.getElementById('mobileInstructions');
+    const desktopInstructions = document.getElementById('desktopInstructions');
+
+    // Set canvas size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    
+    // Game variables
+    let snake = [];
+    let direction = { x: 1, y: 0 };
+    let nextDirection = { x: 1, y: 0 };
+    let mouse = { x: 0, y: 0 };
+    let score = 0;
+    let gameRunning = false;
+    let animationId;
+    let lastUpdateTime = 0;
+    let gameSpeed = 120; // Base speed in ms
+    let cellSize = 20; // Grid cell size
+    let isFirstRun = true;
+    let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    let gameInitialized = false;
+
+    // Show intro
+    if (isFirstRun) {
+      setTimeout(() => {
+        gameTitle.style.display = 'none';
+        if (isMobile) {
+          mobileInstructions.classList.remove('hidden');
+        } else {
+          desktopInstructions.classList.remove('hidden');
+        }
+      }, 2000);
+    }
+
+    // Initialize snake with proper grid alignment
+    function initSnake() {
+      const centerX = Math.floor(canvas.width / 2 / cellSize) * cellSize;
+      const centerY = Math.floor(canvas.height / 2 / cellSize) * cellSize;
+      
+      snake = [
+        { x: centerX, y: centerY },
+        { x: centerX - cellSize, y: centerY },
+        { x: centerX - cellSize * 2, y: centerY },
+        { x: centerX - cellSize * 3, y: centerY },
+        { x: centerX - cellSize * 4, y: centerY }
+      ];
+      
+      direction = { x: 1, y: 0 };
+      nextDirection = { x: 1, y: 0 };
+      gameInitialized = true;
+    }
+
+    // Place mouse at random grid-aligned position
+    function placeMouse() {
+      let validPosition = false;
+      let attempts = 0;
+      const maxAttempts = 100;
+      
+      while (!validPosition && attempts < maxAttempts) {
+        const gridX = Math.floor(Math.random() * (canvas.width / cellSize - 4)) + 2;
+        const gridY = Math.floor(Math.random() * (canvas.height / cellSize - 4)) + 2;
+        
+        mouse = {
+          x: gridX * cellSize,
+          y: gridY * cellSize,
+          angle: 0
+        };
+        
+        // Check if mouse is not on snake
+        validPosition = !snake.some(segment => 
+          segment.x === mouse.x && segment.y === mouse.y
+        );
+        
+        // Also check minimum distance from head
+        if (validPosition && snake.length > 0) {
+          const head = snake[0];
+          const distance = Math.abs(head.x - mouse.x) + Math.abs(head.y - mouse.y);
+          if (distance < cellSize * 3) {
+            validPosition = false;
+          }
+        }
+        
+        attempts++;
+      }
+    }
+
+    // Draw snake with smooth animation
+    function drawSnake() {
+      snake.forEach((segment, index) => {
+        const isHead = index === 0;
+        const alpha = Math.max(0.3, 1 - (index * 0.05)); // Ensure minimum visibility
+        
+        if (isHead) {
+          // Draw head
+          ctx.fillStyle = '#00ffff';
+          ctx.shadowColor = '#00ffff';
+          ctx.shadowBlur = 15;
+          
+          ctx.beginPath();
+          ctx.arc(segment.x + cellSize/2, segment.y + cellSize/2, cellSize/2 - 1, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Draw eyes
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = 'white';
+          const eyeSize = cellSize * 0.15;
+          const eyeOffset = cellSize * 0.25;
+          
+          ctx.beginPath();
+          ctx.arc(
+            segment.x + cellSize/2 + direction.x * eyeOffset - direction.y * eyeOffset,
+            segment.y + cellSize/2 + direction.y * eyeOffset + direction.x * eyeOffset,
+            eyeSize, 0, Math.PI * 2
+          );
+          ctx.arc(
+            segment.x + cellSize/2 + direction.x * eyeOffset + direction.y * eyeOffset,
+            segment.y + cellSize/2 + direction.y * eyeOffset - direction.x * eyeOffset,
+            eyeSize, 0, Math.PI * 2
+          );
+          ctx.fill();
+          
+          // Draw pupils
+          ctx.fillStyle = 'black';
+          ctx.beginPath();
+          ctx.arc(
+            segment.x + cellSize/2 + direction.x * eyeOffset - direction.y * eyeOffset,
+            segment.y + cellSize/2 + direction.y * eyeOffset + direction.x * eyeOffset,
+            eyeSize * 0.5, 0, Math.PI * 2
+          );
+          ctx.arc(
+            segment.x + cellSize/2 + direction.x * eyeOffset + direction.y * eyeOffset,
+            segment.y + cellSize/2 + direction.y * eyeOffset - direction.x * eyeOffset,
+            eyeSize * 0.5, 0, Math.PI * 2
+          );
+          ctx.fill();
+        } else {
+          // Draw body segments with consistent visibility
+          const hue = 120 + (index * 8);
+          ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`;
+          ctx.shadowColor = `hsla(${hue}, 100%, 50%, ${alpha})`;
+          ctx.shadowBlur = 8;
+          
+          const size = Math.max(cellSize/2 - (index * 0.3), cellSize/4); // Minimum size
+          ctx.beginPath();
+          ctx.arc(segment.x + cellSize/2, segment.y + cellSize/2, size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+      
+      ctx.shadowBlur = 0;
+    }
+
+    // Draw mouse with animation
+    function drawMouse() {
+      mouse.angle += 0.1;
+      const bounce = Math.sin(mouse.angle) * 2;
+      
+      const centerX = mouse.x + cellSize/2;
+      const centerY = mouse.y + cellSize/2 + bounce;
+      const size = cellSize * 0.4;
+      
+      // Body
+      ctx.fillStyle = '#ff8888';
+      ctx.shadowColor = '#ff8888';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, size, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Ears
+      ctx.beginPath();
+      ctx.arc(centerX - size * 0.6, centerY - size * 0.6, size * 0.4, 0, Math.PI * 2);
+      ctx.arc(centerX + size * 0.6, centerY - size * 0.6, size * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.shadowBlur = 0;
+      
+      // Eyes
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      ctx.arc(centerX - size * 0.3, centerY - size * 0.2, size * 0.15, 0, Math.PI * 2);
+      ctx.arc(centerX + size * 0.3, centerY - size * 0.2, size * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(centerX - size * 0.3, centerY - size * 0.2, size * 0.08, 0, Math.PI * 2);
+      ctx.arc(centerX + size * 0.3, centerY - size * 0.2, size * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Nose
+      ctx.fillStyle = 'pink';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY + size * 0.1, size * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Tail
+      ctx.strokeStyle = '#ff8888';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX + size * 0.8, centerY + size * 0.5);
+      
+      const tailX = centerX + size * 1.5 + Math.sin(mouse.angle * 1.5) * 5;
+      const tailY = centerY + size * 1.2 + Math.cos(mouse.angle * 1.5) * 3;
+      ctx.lineTo(tailX, tailY);
+      ctx.stroke();
+    }
+
+    // Update game state
+    function update(timestamp) {
+      if (!gameRunning || !gameInitialized) return;
+      
+      if (timestamp - lastUpdateTime > gameSpeed) {
+        lastUpdateTime = timestamp;
+        
+        // Update direction (prevent reverse)
+        if (nextDirection.x !== -direction.x || nextDirection.y !== -direction.y) {
+          direction = { ...nextDirection };
+        }
+        
+        // Calculate new head position
+        const head = { ...snake[0] };
+        head.x += direction.x * cellSize;
+        head.y += direction.y * cellSize;
+        
+        // Wrap around screen edges
+        if (head.x < 0) head.x = canvas.width - cellSize;
+        if (head.x >= canvas.width) head.x = 0;
+        if (head.y < 0) head.y = canvas.height - cellSize;
+        if (head.y >= canvas.height) head.y = 0;
+        
+        // Check self collision (skip first 3 segments to allow turning)
+        for (let i = 3; i < snake.length; i++) {
+          if (head.x === snake[i].x && head.y === snake[i].y) {
+            gameOver();
+            return;
+          }
+        }
+        
+        // Move snake
+        snake.unshift(head);
+        
+        // Check if mouse is eaten - check collision with proper distance
+        const headCenterX = head.x + cellSize/2;
+        const headCenterY = head.y + cellSize/2;
+        const mouseCenterX = mouse.x + cellSize/2;
+        const mouseCenterY = mouse.y + cellSize/2;
+        
+        const distance = Math.sqrt(
+          Math.pow(headCenterX - mouseCenterX, 2) + 
+          Math.pow(headCenterY - mouseCenterY, 2)
+        );
+        
+        if (distance < cellSize * 0.8) { // Allow for slight overlap
+          score++;
+          scoreDisplay.textContent = `Score: ${score}`;
+          
+          // Increase speed gradually
+          if (score % 3 === 0 && gameSpeed > 60) {
+            gameSpeed -= 3;
+          }
+          
+          // Create eating effect
+          createEatingEffect(headCenterX, headCenterY);
+          
+          placeMouse();
+        } else {
+          snake.pop(); // Remove tail if no food eaten
+        }
+      }
+      
+      draw();
+      animationId = requestAnimationFrame(update);
+    }
+
+    // Create eating effect
+    function createEatingEffect(x, y) {
+      const particles = [];
+      for (let i = 0; i < 8; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 10,
+          vy: (Math.random() - 0.5) * 10,
+          life: 20,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`
+        });
+      }
+      
+      function animateParticles() {
+        particles.forEach((particle, index) => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          particle.life--;
+          
+          if (particle.life <= 0) {
+            particles.splice(index, 1);
+          }
+        });
+        
+        if (particles.length > 0) {
+          requestAnimationFrame(animateParticles);
+        }
+      }
+      
+      animateParticles();
+    }
+
+    // Draw everything
+    function draw() {
+      // Clear canvas with fade effect
+      ctx.fillStyle = 'rgba(17, 17, 17, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw mouse first (so snake appears on top)
+      drawMouse();
+      
+      // Draw snake
+      drawSnake();
+    }
+
+    // Game over
+    function gameOver() {
+      gameRunning = false;
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      startBtn.textContent = '▶';
+      
+      // Screen flash effect
+      ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      setTimeout(() => {
+        const gameOverDiv = document.createElement('div');
+        gameOverDiv.innerHTML = `
+          <div style="color: white; text-align: center; padding: 20px;">
+            <h2 style="color: #ff4444; margin-bottom: 20px;">Game Over!</h2>
+            <p style="margin: 10px 0;">Your score: <strong style="color: #0ff;">${score} 🎉</strong></p>
+            <div style="margin-top: 20px;">
+              <button onclick="this.parentElement.parentElement.parentElement.style.display='none'; startGame();" 
+                      style="background: #0ff; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 0 10px;">
+                Play Again 😃
+              </button>
+              <button onclick="this.parentElement.parentElement.parentElement.style.display='none';" 
+                      style="background: #ff8888; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 0 10px;">
+                Exit 😒
+              </button>
+            </div>
+          </div>
+        `;
+        gameOverDiv.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(0, 0, 0, 0.9);
+          border: 2px solid #ff4444;
+          border-radius: 10px;
+          z-index: 1000;
+          max-width: 400px;
+          width: 90%;
+        `;
+        document.body.appendChild(gameOverDiv);
+      }, 500);
+    }
+
+    // Start new game
+    function startGame() {
+      score = 0;
+      gameSpeed = 120;
+      scoreDisplay.textContent = `Score: ${score}`;
+      initSnake();
+      placeMouse();
+      gameRunning = true;
+      lastUpdateTime = 0;
+      animationId = requestAnimationFrame(update);
+      startBtn.textContent = '❚❚';
+      
+      // Hide instructions after first game
+      if (isFirstRun) {
+        isFirstRun = false;
+        mobileInstructions.classList.add('hidden');
+        desktopInstructions.classList.add('hidden');
+      }
+    }
+
+    // Pause game
+    function pauseGame() {
+      gameRunning = false;
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      startBtn.textContent = '▶';
+    }
+
+    // Toggle fullscreen
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Event listeners
+    startBtn.addEventListener('click', () => {
+      if (gameRunning) {
+        pauseGame();
+      } else {
+        if (!gameInitialized) {
+          startGame();
+        } else {
+          gameRunning = true;
+          lastUpdateTime = performance.now();
+          animationId = requestAnimationFrame(update);
+          startBtn.textContent = '❚❚';
+        }
+      }
+    });
+
+    exitBtn.addEventListener('click', () => {
+      if (gameRunning) {
+        pauseGame();
+      }
+      
+      const exitDiv = document.createElement('div');
+      exitDiv.innerHTML = `
+        <div style="color: white; text-align: center; padding: 20px;">
+          <h2 style="color: #ffaa00; margin-bottom: 20px;">Exit Game?</h2>
+          <p style="margin: 10px 0;">Are you sure you want to exit?</p>
+          <div style="margin-top: 20px;">
+            <button onclick="handleExit(true, this.parentElement.parentElement.parentElement)" 
+                    style="background: #0ff; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 0 10px;">
+              Yes
+            </button>
+            <button onclick="handleExit(false, this.parentElement.parentElement.parentElement)" 
+                    style="background: #ff8888; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 0 10px;">
+              No
+            </button>
+          </div>
+        </div>
+      `;
+      exitDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #ffaa00;
+        border-radius: 10px;
+        z-index: 1000;
+        max-width: 400px;
+        width: 90%;
+      `;
+      document.body.appendChild(exitDiv);
+    });
+    
+    // Handle exit dialog
+    window.handleExit = function(confirmed, dialogElement) {
+      dialogElement.style.display = 'none';
+      if (confirmed) {
+        gameRunning = false;
+        gameInitialized = false;
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        
+        // Reset display
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.font = '30px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Game Exited', canvas.width/2, canvas.height/2);
+        ctx.fillText('Click Play to Start Again', canvas.width/2, canvas.height/2 + 40);
+        
+        startBtn.textContent = '▶';
+        score = 0;
+        scoreDisplay.textContent = 'Score: 0';
+      } else if (gameInitialized) {
+        gameRunning = true;
+        lastUpdateTime = performance.now();
+        animationId = requestAnimationFrame(update);
+        startBtn.textContent = '❚❚';
+      }
+    };
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Keyboard controls
+    window.addEventListener('keydown', (e) => {
+      if (!gameRunning) {
+        if (e.key === ' ' || e.key === 'Enter') {
+          if (!gameInitialized) {
+            startGame();
+          } else {
+            gameRunning = true;
+            lastUpdateTime = performance.now();
+            animationId = requestAnimationFrame(update);
+            startBtn.textContent = '❚❚';
+          }
+        }
+        return;
+      }
+      
+      e.preventDefault();
+      
+      switch (e.key) {
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+          if (direction.y === 0) nextDirection = { x: 0, y: -1 };
+          break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+          if (direction.y === 0) nextDirection = { x: 0, y: 1 };
+          break;
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          if (direction.x === 0) nextDirection = { x: -1, y: 0 };
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          if (direction.x === 0) nextDirection = { x: 1, y: 0 };
+          break;
+        case ' ':
+          pauseGame();
+          break;
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      if (gameInitialized) {
+        // Adjust snake and mouse positions if needed
+        snake.forEach(segment => {
+          segment.x = Math.min(segment.x, canvas.width - cellSize);
+          segment.y = Math.min(segment.y, canvas.height - cellSize);
+        });
+        
+        if (mouse.x >= canvas.width - cellSize || mouse.y >= canvas.height - cellSize) {
+          placeMouse();
+        }
+      }
+    });
+
+    // Touch controls for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    const minSwipeDistance = 50;
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', (e) => {
+      if (!gameRunning) return;
+      
+      e.preventDefault();
+      touchEndX = e.changedTouches[0].clientX;
+      touchEndY = e.changedTouches[0].clientY;
+      
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+      
+      if (Math.abs(deltaX) > minSwipeDistance || Math.abs(deltaY) > minSwipeDistance) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Horizontal swipe
+          if (deltaX > 0 && direction.x === 0) {
+            nextDirection = { x: 1, y: 0 }; // Right
+          } else if (deltaX < 0 && direction.x === 0) {
+            nextDirection = { x: -1, y: 0 }; // Left
+          }
+        } else {
+          // Vertical swipe
+          if (deltaY > 0 && direction.y === 0) {
+            nextDirection = { x: 0, y: 1 }; // Down
+          } else if (deltaY < 0 && direction.y === 0) {
+            nextDirection = { x: 0, y: -1 }; // Up
+          }
+        }
+      }
+    }, { passive: false });
+
+    // Initialize game
+    function init() {
+      resizeCanvas();
+      draw();
+      
+      // Show welcome message
+      setTimeout(() => {
+        const welcomeMessage = document.createElement('div');
+        welcomeMessage.innerHTML = `
+          <div style="color: white; text-align: center; padding: 20px;">
+            <h2 style="color: #0ff; margin-bottom: 20px;">Welcome to Snake vs Mouse!</h2>
+            <p style="margin: 10px 0;">${isMobile ? 'Swipe to guide the snake' : 'Use arrow keys or WASD to control the snake'}</p>
+            <p style="margin: 10px 0;">Press Space to pause</p>
+            <button onclick="this.parentElement.parentElement.style.display='none'; startGame();" 
+                    style="background: #0ff; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+              Start Game
+            </button>
+          </div>
+        `;
+         welcomeMessage.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(0, 0, 0, 0.9);
+          border: 2px solid #0ff;
+          border-radius: 10px;
+          z-index: 1000;
+          max-width: 400px;
+          width: 90%;
+        `;
+        document.body.appendChild(welcomeMessage);
+      }, 500);
+    }
+
+    // Start the game
+    init();
+  </script>
+</body>
+</html>
